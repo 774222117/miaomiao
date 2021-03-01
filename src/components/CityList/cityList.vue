@@ -84,6 +84,9 @@
                     <div>小吃</div>
                     <div>折扣卡</div>
                 </div>
+                <!-- <div class="card">
+                    <div v-for="(num,key) in item.tag" v-if="num===1" :key="key" :class="key | classCard">{{key}}</div>
+                </div> -->
             </li>
         </ul>
     </div>
@@ -97,12 +100,50 @@ export default {
     },
     data(){
         return {
-
+            cinemaList:[],
         }
+    },
+    mounted(){
+        this.axios.get('/api/cinemaList?cityId=10').then((res) => {
+            var msg = res.data.msg;
+            if(msg === 'ok'){
+                this.cinemaList = res.data.data.cinemas;
+            }
+        })
     },
     methods: {
         
     },
+    filters:{
+        formatCard(key){
+            var card = [
+                {key:'allowRefund',value:'改签'},
+                {key:'endorse',value:'退'},
+                {key:'sell',value:'折扣卡'},
+                {key:'snack',value:'小吃'},
+            ];
+            for(var i = 0;i < card.length;i++){
+                if(card[i].key === key){
+                    return card[i].value;
+                }
+            }
+            return '';
+        },
+        classCard(){
+            var card = [
+                {key:'allowRefund',value:'bl'},
+                {key:'endorse',value:'bl'},
+                {key:'sell',value:'or'},
+                {key:'snack',value:'or'},
+            ];
+            for(var i = 0;i < card.length;i++){
+                if(card[i].key === key){
+                    return card[i].value;
+                }
+            }
+            return '';
+        }
+    }
 }
 </script>
 

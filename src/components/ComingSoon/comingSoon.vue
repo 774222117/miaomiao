@@ -1,19 +1,19 @@
 <template>
     <div class="movie_body">
         <ul>
-            <li>
-                <div class="pic_show"><img src="/images/movie_1.jpg"></div>
+            <li v-for="item in comingMovie">
+                <div class="pic_show"><img :src="item.img | setWH('173.230')"></div>
                 <div class="info_list">
-                    <h2>无名之辈</h2>
-                    <p><span class="person">17746</span> 人想看</p>
-                    <p>主演: 陈建斌,任素汐,潘斌龙</p>
-                    <p>2018-11-30上映</p>
+                    <h2>{{item.nm}} <img v-if="item.version" src="@/assets/maxs.png" alt=""></h2>
+                    <p><span class="person">{{item.wish}}</span> 人想看</p>
+                    <p>主演: {{item.star}}</p>
+                    <p>{{item.showInfo}}</p>
                 </div>
                 <div class="btn_pre">
                     预售
                 </div>
             </li>
-            <li>
+            <!-- <li>
                 <div class="pic_show"><img src="/images/movie_2.jpg"></div>
                 <div class="info_list">
                     <h2>毒液：致命守护者</h2>
@@ -96,7 +96,7 @@
                 <div class="btn_pre">
                     预售
                 </div>
-            </li>
+            </li> -->
         </ul>
     </div>
 </template>
@@ -109,11 +109,23 @@ export default {
     },
     data(){
         return {
-
+            comingMovie:'',//保存即将上映的电影数据
         }
     },
+    mounted(){
+        this.getComingMovie();
+    },
     methods: {
-        
+        // 获得即将上映电影数据
+        getComingMovie(){
+            this.axios.get('http://localhost:8080/css/comingSoon.json').then(res => {
+                // console.log(res)
+                if(res){
+                    this.comingMovie = res.data.coming
+                    // console.log(this.comingMovie)
+                }
+            })
+        }
     },
 }
 </script>
